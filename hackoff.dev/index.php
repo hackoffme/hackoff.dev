@@ -41,7 +41,7 @@
                     show: true,
                     sizeAdjust: 7.5
                 },
-                cursor: {
+                 cursor: {
                     show: false
                 }
             });

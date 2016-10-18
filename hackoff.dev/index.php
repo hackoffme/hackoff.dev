@@ -11,24 +11,29 @@
     <body>
         <?php
         $Url = "http://www.cbr.ru/scripts/XML_daily.asp?date_req=";
-        $Url .= date('d/m/Y');
-        $xml = simplexml_load_file($Url);
-        $valute = $xml->xpath(".//*[@ID='R01100']");
+        for ($i = 0; $i < 10; $i++) {
+            $date=date('d/m/Y', mktime(0, 0, 0, date('m'), date('d') - $i, date('Y')));
+            $UrlDate = $Url.$date;
+            $xml = simplexml_load_file($Url);
+            $valute = $xml->xpath(".//*[@ID='R01100']");
+            print_r($valute);
+            echo '<br>';
+            //print_r( $valute->value);
+            //echo $valute['Value'];
+        }
 
-        //print_r($valute);
-       // echo date('d/m/Y', mktime(0, 0, 0, date('m'), date('d') - 10, date('Y')));
         ?>   
-
+   
         <div id='plot' style="width:500px;height:400px"></div>
         <script>
-            var line1 = [['10/10/2016', 578.55], ['11/10/2016', 566.5], ['12/10/2016', 480.88], ['13/10/2016', 509.84]];
+            var line1 = [['2016-10-11', 578.55], ['2016-10-12', 566.5], ['2016-10-13', 480.88], ['2016-10-14', 509.84]];
             var plot1 = $.jqplot('plot', [line1], {
                 title: 'Data Point Highlighting',
                 axes: {
                     xaxis: {
                         renderer: $.jqplot.DateAxisRenderer,
                         tickOptions: {
-                            formatString: '%d/%m/%Y'
+                            formatString: '%Y-%m-%d'
                         }
                     },
                     yaxis: {
@@ -41,7 +46,7 @@
                     show: true,
                     sizeAdjust: 7.5
                 },
-                 cursor: {
+                cursor: {
                     show: false
                 }
             });

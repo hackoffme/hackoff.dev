@@ -15,14 +15,11 @@
             $date=date('d/m/Y', mktime(0, 0, 0, date('m'), date('d') - $i, date('Y')));
             $UrlDate = $Url.$date;
             $xml = simplexml_load_file($Url);
-            $valute = $xml->xpath(".//*[@ID='R01100']");
-            print_r($valute);
-            echo '<br>';
-            //print_r( $valute->value);
-            //echo $valute['Value'];
+            $valute = $xml->xpath(".//*[@ID='R01239']");
+            $valuteList[$date]= floatval(str_replace(',','.',$valute[0]->Value));
         }
-
-        ?>   
+       // echo json_encode($valuteList);
+         ?>   
    
         <div id='plot' style="width:500px;height:400px"></div>
         <script>

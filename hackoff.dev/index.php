@@ -12,19 +12,35 @@
         <?php
         $Url = "http://www.cbr.ru/scripts/XML_daily.asp?date_req=";
         for ($i = 0; $i < 10; $i++) {
-            $date=date('d/m/Y', mktime(0, 0, 0, date('m'), date('d') - $i, date('Y')));
-            $UrlDate = $Url.$date;
+            $date = date('d/m/Y', mktime(0, 0, 0, date('m'), date('d') - $i, date('Y')));
+            $dateForJava = date('Y-m-d', mktime(0, 0, 0, date('m'), date('d') - $i, date('Y')));
+            $UrlDate = $Url . $date;
             $xml = simplexml_load_file($Url);
             $valute = $xml->xpath(".//*[@ID='R01239']");
-            $valuteList[$date]= floatval(str_replace(',','.',$valute[0]->Value));
+            $valuteList[$dateForJava] = floatval(str_replace(',', '.', $valute[0]->Value));
         }
-       // echo json_encode($valuteList);
-         ?>   
-   
+        ?>   
+
         <div id='plot' style="width:500px;height:400px"></div>
         <script>
+            // alert($.parseJSON(data));
+
+            var ar = <?php echo json_encode($valuteList) ?>;
+            var arToGraph=[];
+            for (var item in ar) {
+              // alert(item);
+              // alert(ar[item]);
+              arToGraph.push([item,ar[item]]);
+               
+
+            }
             var line1 = [['2016-10-11', 578.55], ['2016-10-12', 566.5], ['2016-10-13', 480.88], ['2016-10-14', 509.84]];
-            var plot1 = $.jqplot('plot', [line1], {
+            //var a = Array.from(ar);
+
+             //alert(line1);
+            //alert(arToGraph);
+
+            var plot1 = $.jqplot('plot', [arToGraph], {
                 title: 'Data Point Highlighting',
                 axes: {
                     xaxis: {

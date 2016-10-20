@@ -9,38 +9,27 @@
         <link rel="stylesheet" type="text/css" href="src/jquery.jqplot.css" />
     </head>
     <body>
+        
         <?php
+        $valuteID='R01235';
+        if (isset($_POST['button'])){
+            $valuteID=$_POST['selectValute'];
+        }
         $Url = "http://www.cbr.ru/scripts/XML_daily.asp?date_req=";
         for ($i = 0; $i < 10; $i++) {
             $date = date('d/m/Y', mktime(0, 0, 0, date('m'), date('d') - $i, date('Y')));
             $dateForJava = date('Y-m-d', mktime(0, 0, 0, date('m'), date('d') - $i, date('Y')));
-            $UrlDate = $Url . $date;
-            $xml = simplexml_load_file($Url);
-            $valute = $xml->xpath(".//*[@ID='R01239']");
-            $valuteList[$dateForJava] = floatval(str_replace(',', '.', $valute[0]->Value));
+            $UrlDate = $Url . $date ;
+            $xml = simplexml_load_file($UrlDate);
+            $valute = $xml->xpath(".//*[@ID='".$valuteID."']");
+            $valuteList[] = [$dateForJava, floatval(str_replace(',', '.', $valute[0]->Value))];
         }
         ?>   
 
         <div id='plot' style="width:500px;height:400px"></div>
         <script>
-            // alert($.parseJSON(data));
-
             var ar = <?php echo json_encode($valuteList) ?>;
-            var arToGraph=[];
-            for (var item in ar) {
-              // alert(item);
-              // alert(ar[item]);
-              arToGraph.push([item,ar[item]]);
-               
-
-            }
-            var line1 = [['2016-10-11', 578.55], ['2016-10-12', 566.5], ['2016-10-13', 480.88], ['2016-10-14', 509.84]];
-            //var a = Array.from(ar);
-
-             //alert(line1);
-            //alert(arToGraph);
-
-            var plot1 = $.jqplot('plot', [arToGraph], {
+            var plot1 = $.jqplot('plot', [ar], {
                 title: 'Data Point Highlighting',
                 axes: {
                     xaxis: {
@@ -64,6 +53,12 @@
                 }
             });
         </script>
-
+        <form action="index.php" method="post" name='form'>
+            <select name='selectValute'>
+                <option  value="R01235">USD</option>
+                <option value="R01239">EURO</option>
+                <input name='button' type="submit" value="Отправить">
+            </select>
+        </form>
     </body>
 </html>

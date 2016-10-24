@@ -12,6 +12,8 @@
         
         <?php
         $valuteID='R01235';
+        $valuteName['R01235']='USD';
+        $valuteName['R01239']='EURO';
         if (isset($_POST['button'])){
             $valuteID=$_POST['selectValute'];
         }
@@ -19,8 +21,14 @@
         for ($i = 0; $i < 10; $i++) {
             $date = date('d/m/Y', mktime(0, 0, 0, date('m'), date('d') - $i, date('Y')));
             $dateForJava = date('Y-m-d', mktime(0, 0, 0, date('m'), date('d') - $i, date('Y')));
+            $filename='/opt/lampp/docs/hackoff.dev/'.$dateForJava.$valuteName[$valuteID];
             $UrlDate = $Url . $date ;
-            $xml = simplexml_load_file($UrlDate);
+            if (file_exists($filename)) {
+                $xml = simplexml_load_file($filename);
+            } else {
+               $xml = simplexml_load_file($UrlDate); 
+               $xml->asXML($filename);
+            }
             $valute = $xml->xpath(".//*[@ID='".$valuteID."']");
             $valuteList[] = [$dateForJava, floatval(str_replace(',', '.', $valute[0]->Value))];
         }
@@ -30,7 +38,7 @@
         <script>
             var ar = <?php echo json_encode($valuteList) ?>;
             var plot1 = $.jqplot('plot', [ar], {
-                title: 'Data Point Highlighting',
+                title: <?php echo json_encode($valuteName[$valuteID]);?>,
                 axes: {
                     xaxis: {
                         renderer: $.jqplot.DateAxisRenderer,

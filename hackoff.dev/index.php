@@ -45,9 +45,7 @@
         }
         $valuteFile[$valuteID] = $valuteList;
         $serializeValute = serialize($valuteFile);
-        $f = fopen('data', 'w');
-        fwrite($f, $serializeValute);
-        fclose($f);
+        file_put_contents('data', $serializeValute);
         ?>   
 
         <div id='plot' style="width:500px;height:400px"></div>

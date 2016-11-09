@@ -17,13 +17,20 @@ and open the template in the editor.
         <?php
         require_once '/opt/lampp/docs/hackoff.dev/Classes/PHPExcel.php';
 
-        //var_dump($_FILES['exel']['tmp_name']);
-        //echo file_exists($_FILES['exel']['tmp_name']);
         if (array_key_exists('excel', $_FILES)) {
             $excel = PHPExcel_IOFactory::load($_FILES['excel']['tmp_name']);
-            var_dump($excel);
+            $ar = array();
+            $ar = $excel->getActiveSheet()->toArray();
+            unset($excel);
+            $ser = serialize($ar);
+//            foreach ($ar as $key => $value) {
+//                echo '<br>';
+//                print_r($value);
+//            }
+            file_put_contents('data', serialize($ar));
         }
         
         ?>
+        <a href="vklady.php">Vklady</a>
     </body>
 </html>

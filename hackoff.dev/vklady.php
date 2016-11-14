@@ -33,19 +33,19 @@ and open the template in the editor.
                     //plural_form('1', array('месяц', 'месяца', 'месяцев'));
                     //var_dump(get_defined_vars());
                     ?>
-                    <div id="calc">
+                    <div id="calc" style="background: #9acfea;">
                         <div class="row">
                             <div class="col-md-4">Сумма вклада</div>
-                            <div class="col-md-4">
+                            <div class="col-md-8">
                                 <div><input type="text" name="chance" id="chance" class="text" value="300000" max="1500000">
-                                    <input type="range" id="chanceSlider" min="20000" value="300000" max="1500000" step="10000" style="background-color: #00aec8; width: 50%;">
+                                    <input type="range" id="chanceSlider" min="20000" value="300000" max="1500000" step="10000" style="background-color: #00aec8;">
                                 </div>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-4">Срок</div>
-                            <div class="col-md-4">
+                            <div class="col-md-8">
                                 <select name="period" id='period'>
                                     <?php
                                     for ($index = 1; $index < count($ar); $index++) {
@@ -62,7 +62,7 @@ and open the template in the editor.
                         </div>
                         <div class="row">
                             <div class="col-md-4">Сумма процентов</div>
-                            <div class="col-md-4">
+                            <div class="col-md-8">
                                 <div id="summa">123</div>
                             </div>
                         </div>
@@ -75,6 +75,9 @@ and open the template in the editor.
                             changeCalc();
                         });
                         $('#period').change(function () {
+                            changeCalc();
+                        });
+                        $(window).load(function (){
                             changeCalc();
                         });
 
@@ -107,7 +110,7 @@ and open the template in the editor.
                             }
 
                             var summaProcentov = summaVklada * srokVklada * ar[IsrokVklad][IsummaVklada] / 1200;
-                            document.getElementById('summa').innerHTML = summaProcentov;
+                            document.getElementById('summa').innerHTML = '<h3>'+summaProcentov+'</h3>';
                             //alert(ar[IsrokVklad][IsummaVklada]);
                             //alert(summaProcentov);
 
